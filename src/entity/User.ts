@@ -12,12 +12,11 @@ export class User extends BaseEntity {
     @Column()
     username: string;
 
-
     @Field()
     @Column()
     email: string;
 
     @Column()
-    password: number;
+    password: string;
     // places
 }

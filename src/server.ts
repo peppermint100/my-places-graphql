@@ -4,8 +4,12 @@ import cors from "cors"
 import PORT from "./config/port"
 import "reflect-metadata"
 import { createSchema } from "./util/createSchema"
+import { dbOptions } from "./config/db"
+import { createConnection } from "typeorm"
 
 async function init() {
+    await createConnection(dbOptions)
+
     const schema = await createSchema()
     const apolloServer = new ApolloServer({
         schema
