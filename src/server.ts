@@ -1,25 +1,48 @@
 import { ApolloServer } from "apollo-server-express"
 import express from "express"
 import cors from "cors"
-import PORT from "./config/port"
+import { PORT, SESSION_SECRET } from "./config"
 import "reflect-metadata"
 import { createSchema } from "./util/createSchema"
 import { dbOptions } from "./config/db"
 import { createConnection } from "typeorm"
+import connectRedis from "connect-redis"
+import session from "express-session"
+import { redis } from "./util/redis"
 
 async function init() {
     await createConnection(dbOptions)
 
     const schema = await createSchema()
     const apolloServer = new ApolloServer({
-        schema
+        schema,
+        context: ({ req }: any) => ({ req })
     })
 
     const app = express()
 
-    app.use(cors())
+    const RedisStore = connectRedis(session)
 
-    apolloServer.applyMiddleware({ app, cors: false })
+    app.use(session({
+        store: new RedisStore({
+            client: redis
+        }),
+        name: "qid",
+        secret: SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            httpOnly: true,
+            // secure: true,
+            maxAge: 1000 * 60 * 5
+        }
+    }))
+    app.use(cors({
+        credentials: true,
+        origin: process.env.CLIENT
+    }))
+
+    apolloServer.applyMiddleware({ app })
 
     app.listen(PORT, () => {
         console.log(`GraphQL Server Started On Port ${PORT}`)
