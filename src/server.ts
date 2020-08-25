@@ -23,6 +23,7 @@ async function init() {
 
     const RedisStore = connectRedis(session)
 
+    app.use(express.json())
     app.use(session({
         store: new RedisStore({
             client: redis
@@ -32,17 +33,18 @@ async function init() {
         resave: false,
         saveUninitialized: false,
         cookie: {
-            httpOnly: true,
-            // secure: true,
+            // httpOnly: true,
+            secure: false, // if truthy, only excepts https
             maxAge: 1000 * 60 * 5
         }
     }))
+
     app.use(cors({
         credentials: true,
-        origin: process.env.CLIENT
+        origin: process.env.CLIENT || "http://localhost:3000",
     }))
 
-    apolloServer.applyMiddleware({ app })
+    apolloServer.applyMiddleware({ app, cors: false })
 
     app.listen(PORT, () => {
         console.log(`GraphQL Server Started On Port ${PORT}`)

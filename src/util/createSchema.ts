@@ -1,5 +1,5 @@
 import { buildSchema } from "type-graphql"
-import { RegisterResolver, LoginResolver, SelfResolver } from "../resolvers/user"
+import { RegisterResolver, LoginResolver, LogoutResolver, SelfResolver } from "../resolvers/user"
 
 
 export const createSchema = () =>
@@ -7,6 +7,7 @@ export const createSchema = () =>
         resolvers: [
             RegisterResolver,
             LoginResolver,
-            SelfResolver
+            SelfResolver,
+            LogoutResolver
         ]
     });
