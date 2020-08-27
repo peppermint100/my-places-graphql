@@ -24,7 +24,7 @@ export function IsEmailAlreadyExist(validationOptions?: ValidationOptions) {
             propertyName: propertyName,
             options: validationOptions,
             constraints: [],
-            validator: IsEmailAlreadyExistConstraint
+            validator: IsEmailAlreadyExistConstraint,
         });
     };
 }

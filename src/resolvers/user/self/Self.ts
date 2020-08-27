@@ -15,7 +15,6 @@ export class SelfResolver {
                 userId: ctx.req.session!.userId
             }
         })
-        console.log("ctx :", ctx.req.session!.userId)
         return user
     }
 }
