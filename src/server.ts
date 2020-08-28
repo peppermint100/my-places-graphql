@@ -47,7 +47,7 @@ async function init() {
     apolloServer.applyMiddleware({ app, cors: false })
 
     app.listen(PORT, () => {
-        console.log(`GraphQL Server Started On Port ${PORT}`)
+        console.log(`GraphQL Server Started On Port ${PORT}!`)
     })
 }
 
