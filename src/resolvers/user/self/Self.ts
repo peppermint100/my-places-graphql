@@ -10,11 +10,13 @@ export class SelfResolver {
             return null
         }
 
-        const user = User.findOne({
+        const user = await User.findOne({
             where: {
                 userId: ctx.req.session!.userId
             }
         })
+
+        console.log(user)
         return user
     }
 }

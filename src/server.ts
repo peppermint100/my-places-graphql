@@ -1,8 +1,8 @@
+import "reflect-metadata"
 import { ApolloServer } from "apollo-server-express"
 import express from "express"
 import cors from "cors"
 import { PORT, SESSION_SECRET } from "./config"
-import "reflect-metadata"
 import { createSchema } from "./util/createSchema"
 import { dbOptions } from "./config/db"
 import { createConnection } from "typeorm"
@@ -11,7 +11,14 @@ import session from "express-session"
 import { redis } from "./util/redis"
 
 async function init() {
-    await createConnection(dbOptions)
+    try{
+        await createConnection(dbOptions)
+        console.log('db connected...')
+    }catch(err){
+        if(err){
+            console.log("db connection err : " , err)
+        }
+    }
 
     const schema = await createSchema()
     const apolloServer = new ApolloServer({
@@ -23,6 +30,7 @@ async function init() {
 
     const RedisStore = connectRedis(session)
 
+ 
     app.use(express.json())
     app.use(session({
         store: new RedisStore({

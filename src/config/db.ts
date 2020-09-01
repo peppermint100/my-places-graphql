@@ -27,4 +27,6 @@ export const dbOptions: ConnectionOptions = {
         __dirname + "./../entity/*.ts"
     ],
     synchronize: true,
+    logging: true,
+
 }

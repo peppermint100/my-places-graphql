@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
+import { Place } from "./Place"
 
 @ObjectType()
-@Entity()
+@Entity("users")
 export class User extends BaseEntity {
     @Field(() => ID)
     @PrimaryGeneratedColumn()
@@ -18,5 +19,8 @@ export class User extends BaseEntity {
 
     @Column()
     password: string;
-    // places
+
+    @Field(()=>[Place], { nullable: true})
+    @OneToMany(() => Place, (place:Place) => place.user, { eager: true})
+    places: Place[];
 }
